@@ -29,6 +29,7 @@ pub struct AppState {
     pub word_wrap: Mutex<bool>,
     pub font_size: Mutex<u32>,
     pub font_family: Mutex<String>,
+    pub preloaded: Mutex<bool>,
     next_id: AtomicU64,
 }
 
@@ -45,6 +46,7 @@ impl Default for AppState {
             word_wrap: Mutex::new(true),
             font_size: Mutex::new(14),
             font_family: Mutex::new("default".to_string()),
+            preloaded: Mutex::new(false),
             next_id: AtomicU64::new(1),
         }
     }

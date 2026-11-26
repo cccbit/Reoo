@@ -6,7 +6,7 @@ use reoo_workspace::{FileNode, HotExitTab, SessionSnapshot};
 use serde::{Deserialize, Serialize};
 use state::{AppState, BufferEntry, TabMeta};
 use std::path::Path;
-use tauri::State;
+use tauri::{Manager, State};
 
 const WELCOME_SNIPPET: &str = r##"// 欢迎使用 Reoo — 极简、轻量化、原生速度的现代编辑器
 //
@@ -66,13 +66,36 @@ where
     Ok(res)
 }
 
-#[tauri::command]
-fn restore_or_init_session(
-    state: State<'_, AppState>,
-    viewport_lines: usize,
-) -> Result<InitSessionResponse, String> {
+fn init_session_into_state(state: &AppState, viewport_lines: usize) -> InitSessionResponse {
     let mut buffers = state.buffers.lock();
     let mut order = state.tab_order.lock();
+
+    // 若后台 setup 线程已预加载完毕，直接零磁盘 I/O 秒返内存快照
+    if *state.preloaded.lock() && !order.is_empty() {
+        let tabs_meta: Vec<TabMeta> = order
+            .iter()
+            .filter_map(|id| buffers.get(id).map(|e| e.meta.clone()))
+            .collect();
+        let active_id = order.last().cloned();
+        let active_viewport = active_id
+            .as_ref()
+            .and_then(|id| buffers.get(id))
+            .map(|e| e.buffer.viewport_slice(0, viewport_lines.max(40)));
+        return InitSessionResponse {
+            workspace_root: state.workspace_root.lock().clone(),
+            theme: state.theme.lock().clone(),
+            locale: state.locale.lock().clone(),
+            accent: state.accent.lock().clone(),
+            startup_mode: state.startup_mode.lock().clone(),
+            word_wrap: *state.word_wrap.lock(),
+            font_size: *state.font_size.lock(),
+            font_family: state.font_family.lock().clone(),
+            active_tab_id: active_id,
+            tabs: tabs_meta,
+            active_viewport,
+        };
+    }
+
     buffers.clear();
     order.clear();
 
@@ -231,13 +254,14 @@ fn restore_or_init_session(
     }
 
     *state.workspace_root.lock() = workspace_root.clone();
+    *state.preloaded.lock() = true;
 
     let active_viewport = active_id
         .as_ref()
         .and_then(|id| buffers.get(id))
         .map(|e| e.buffer.viewport_slice(0, viewport_lines.max(40)));
 
-    Ok(InitSessionResponse {
+    InitSessionResponse {
         workspace_root,
         theme,
         locale,
@@ -249,7 +273,15 @@ fn restore_or_init_session(
         active_tab_id: active_id,
         tabs: tabs_meta,
         active_viewport,
-    })
+    }
+}
+
+#[tauri::command]
+fn restore_or_init_session(
+    state: State<'_, AppState>,
+    viewport_lines: usize,
+) -> Result<InitSessionResponse, String> {
+    Ok(init_session_into_state(&state, viewport_lines))
 }
 
 #[tauri::command]
@@ -958,6 +990,22 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .manage(AppState::default())
+        .setup(|app| {
+            // 与 WebView 初始化完全并行：在后台线程提前预加载会话与首个文件，消除启动 I/O 等待
+            let handle = app.handle().clone();
+            std::thread::spawn(move || {
+                let state = handle.state::<AppState>();
+                let _ = init_session_into_state(&state, 50);
+            });
+
+            // Linux WebKitGTK 立即显示窗口，避免部分桌面环境下隐藏窗口合成空白
+            #[cfg(target_os = "linux")]
+            if let Some(win) = app.get_webview_window("main") {
+                let _ = win.show();
+            }
+
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             restore_or_init_session,
             save_hot_exit_session,
