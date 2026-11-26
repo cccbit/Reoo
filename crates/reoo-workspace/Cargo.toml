@@ -1,0 +1,10 @@
+[package]
+name = "reoo-workspace"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+ignore.workspace = true
+directories.workspace = true
+serde.workspace = true
+serde_json.workspace = true
