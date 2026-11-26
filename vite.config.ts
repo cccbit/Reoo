@@ -22,7 +22,9 @@ export default defineConfig({
     },
   },
   build: {
-    target: "esnext",
+    // 兼容 Windows WebView2、macOS WKWebView 与 Linux WebKitGTK
+    target: ["es2021", "chrome105", "safari14"],
+    cssTarget: ["chrome105", "safari14"],
     minify: "esbuild",
   },
 });

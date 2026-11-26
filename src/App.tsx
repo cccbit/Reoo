@@ -36,6 +36,11 @@ function applyColorSchemeMeta(mode: ThemeMode) {
   if (meta) {
     meta.content = content;
   }
+  if (mode === "system") {
+    document.documentElement.removeAttribute("data-theme");
+  } else {
+    document.documentElement.setAttribute("data-theme", mode);
+  }
   try {
     if (mode === "system") {
       localStorage.removeItem("reoo-color-scheme");

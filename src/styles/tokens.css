@@ -1,82 +1,71 @@
 /* ==========================================================================
-   Reoo Zen-Craft 设计令牌系统 (OKLCH 感知均匀色阶 + 三态主题：浅色/深色/跟随系统)
+   Reoo Zen-Craft 设计令牌系统（全平台兼容扁平 CSS + 三态主题：浅色/深色/跟随系统）
    ========================================================================== */
 
 :root {
   color-scheme: light dark;
 
-  &:has(> head > meta[name="color-scheme"][content="dark"]) {
-    color-scheme: dark;
-  }
-  &:has(> head > meta[name="color-scheme"][content="light"]) {
-    color-scheme: light;
-  }
-
-  /* 字体排印 */
-  --font-ui: "Inter", "Segoe UI Variable", "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", "Consolas", "PingFang SC", "Microsoft YaHei", monospace;
+  --font-ui: "Inter", "Segoe UI Variable", -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "Fira Code", "SF Mono", "Consolas", "PingFang SC", "Microsoft YaHei", monospace;
 
   /* 极夜黑 Obsidian Dark 原始色值 */
-  --surface-0-dark: oklch(16.5% 0.012 258);
-  --surface-1-dark: oklch(19.2% 0.014 258);
-  --surface-2-dark: oklch(22.8% 0.016 258);
-  --surface-hover-dark: oklch(25.5% 0.018 258);
-  --surface-active-line-dark: oklch(20.5% 0.016 258);
-  --border-subtle-dark: oklch(27% 0.015 258 / 0.55);
+  --surface-0-dark: #0e1015;
+  --surface-1-dark: #14171f;
+  --surface-2-dark: #1c202b;
+  --surface-hover-dark: #232836;
+  --surface-active-line-dark: #161a24;
+  --border-subtle-dark: rgba(58, 66, 86, 0.55);
 
-  --text-primary-dark: oklch(90% 0.01 255);
-  --text-secondary-dark: oklch(68% 0.015 255);
-  --text-muted-dark: oklch(50% 0.014 255);
+  --text-primary-dark: #dfe3ec;
+  --text-secondary-dark: #98a1b5;
+  --text-muted-dark: #636c80;
 
-  --accent-dark: oklch(67% 0.19 256);
-  --accent-soft-dark: oklch(67% 0.19 256 / 0.18);
-  --selection-bg-dark: oklch(58% 0.18 256 / 0.30);
+  --accent-dark: #4f8cff;
+  --accent-soft-dark: rgba(79, 140, 255, 0.18);
+  --selection-bg-dark: rgba(59, 130, 246, 0.30);
 
-  /* 语法着色 - 极夜黑 */
-  --tok-keyword-dark: oklch(74% 0.15 305);
-  --tok-string-dark: oklch(78% 0.12 150);
-  --tok-comment-dark: oklch(53% 0.018 255);
-  --tok-number-dark: oklch(79% 0.13 62);
-  --tok-type-dark: oklch(79% 0.12 205);
-  --tok-function-dark: oklch(77% 0.13 245);
-  --tok-operator-dark: oklch(74% 0.09 220);
-  --tok-property-dark: oklch(80% 0.11 230);
-  --tok-punctuation-dark: oklch(64% 0.015 255);
+  --tok-keyword-dark: #c084fc;
+  --tok-string-dark: #6ee7b7;
+  --tok-comment-dark: #6b7488;
+  --tok-number-dark: #fbbf24;
+  --tok-type-dark: #67e8f9;
+  --tok-function-dark: #93c5fd;
+  --tok-operator-dark: #7dd3fc;
+  --tok-property-dark: #a5b4fc;
+  --tok-punctuation-dark: #8892a8;
 
   /* 宣纸白 Alabaster Light 原始色值 */
-  --surface-0-light: oklch(98.8% 0.004 255);
-  --surface-1-light: oklch(96.2% 0.006 255);
-  --surface-2-light: oklch(99.5% 0.003 255);
-  --surface-hover-light: oklch(92.5% 0.009 255);
-  --surface-active-line-light: oklch(95.8% 0.008 250);
-  --border-subtle-light: oklch(88% 0.01 255 / 0.75);
+  --surface-0-light: #fafbfd;
+  --surface-1-light: #f2f4f8;
+  --surface-2-light: #ffffff;
+  --surface-hover-light: #e7ebf2;
+  --surface-active-line-light: #f0f3f9;
+  --border-subtle-light: rgba(206, 213, 226, 0.78);
 
-  --text-primary-light: oklch(23% 0.018 258);
-  --text-secondary-light: oklch(45% 0.018 258);
-  --text-muted-light: oklch(60% 0.014 255);
+  --text-primary-light: #1e2330;
+  --text-secondary-light: #525b70;
+  --text-muted-light: #818b9f;
 
-  --accent-light: oklch(53% 0.21 258);
-  --accent-soft-light: oklch(53% 0.21 258 / 0.12);
-  --selection-bg-light: oklch(60% 0.19 258 / 0.22);
+  --accent-light: #2563eb;
+  --accent-soft-light: rgba(37, 99, 235, 0.12);
+  --selection-bg-light: rgba(37, 99, 235, 0.20);
 
-  /* 语法着色 - 宣纸白 */
-  --tok-keyword-light: oklch(48% 0.18 302);
-  --tok-string-light: oklch(46% 0.14 152);
-  --tok-comment-light: oklch(60% 0.015 255);
-  --tok-number-light: oklch(52% 0.16 55);
-  --tok-type-light: oklch(46% 0.14 210);
-  --tok-function-light: oklch(47% 0.16 252);
-  --tok-operator-light: oklch(46% 0.08 230);
-  --tok-property-light: oklch(46% 0.14 235);
-  --tok-punctuation-light: oklch(52% 0.015 255);
+  --tok-keyword-light: #7c3aed;
+  --tok-string-light: #059669;
+  --tok-comment-light: #8a94a6;
+  --tok-number-light: #d97706;
+  --tok-type-light: #0284c7;
+  --tok-function-light: #2563eb;
+  --tok-operator-light: #475569;
+  --tok-property-light: #1d4ed8;
+  --tok-punctuation-light: #64748b;
 
-  /* 滚动条令牌（符合 WCAG 非文本对比度要求） */
-  --scrollbar-thumb-dark: oklch(44% 0.018 258);
+  --scrollbar-thumb-dark: #4b5368;
   --scrollbar-track-dark: transparent;
-  --scrollbar-thumb-light: oklch(70% 0.014 258);
+  --scrollbar-thumb-light: #a1a9ba;
   --scrollbar-track-light: transparent;
 
-  /* 语义映射：无 light-dark() 时的基础浅色 + prefers-color-scheme: dark 回退 */
+  /* 默认浅色变量映射 */
   --surface-0: var(--surface-0-light);
   --surface-1: var(--surface-1-light);
   --surface-2: var(--surface-2-light);
@@ -105,19 +94,27 @@
   --scrollbar-thumb: var(--scrollbar-thumb-light);
   --scrollbar-track: var(--scrollbar-track-light);
 
-  @media (prefers-color-scheme: dark) {
+  accent-color: var(--accent);
+}
+
+/* 跟随系统深色模式 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
     --surface-0: var(--surface-0-dark);
     --surface-1: var(--surface-1-dark);
     --surface-2: var(--surface-2-dark);
     --surface-hover: var(--surface-hover-dark);
     --surface-active-line: var(--surface-active-line-dark);
     --border-subtle: var(--border-subtle-dark);
+
     --text-primary: var(--text-primary-dark);
     --text-secondary: var(--text-secondary-dark);
     --text-muted: var(--text-muted-dark);
+
     --accent: var(--accent-dark);
     --accent-soft: var(--accent-soft-dark);
     --selection-bg: var(--selection-bg-dark);
+
     --tok-keyword: var(--tok-keyword-dark);
     --tok-string: var(--tok-string-dark);
     --tok-comment: var(--tok-comment-dark);
@@ -127,104 +124,109 @@
     --tok-operator: var(--tok-operator-dark);
     --tok-property: var(--tok-property-dark);
     --tok-punctuation: var(--tok-punctuation-dark);
+
     --scrollbar-thumb: var(--scrollbar-thumb-dark);
     --scrollbar-track: var(--scrollbar-track-dark);
   }
-
-  /* 支持 light-dark() 时由 color-scheme 自动驱动，完美响应 light / dark / system */
-  @supports (color: light-dark(white, black)) {
-    --surface-0: light-dark(var(--surface-0-light), var(--surface-0-dark));
-    --surface-1: light-dark(var(--surface-1-light), var(--surface-1-dark));
-    --surface-2: light-dark(var(--surface-2-light), var(--surface-2-dark));
-    --surface-hover: light-dark(var(--surface-hover-light), var(--surface-hover-dark));
-    --surface-active-line: light-dark(var(--surface-active-line-light), var(--surface-active-line-dark));
-    --border-subtle: light-dark(var(--border-subtle-light), var(--border-subtle-dark));
-
-    --text-primary: light-dark(var(--text-primary-light), var(--text-primary-dark));
-    --text-secondary: light-dark(var(--text-secondary-light), var(--text-secondary-dark));
-    --text-muted: light-dark(var(--text-muted-light), var(--text-muted-dark));
-
-    --accent: light-dark(var(--accent-light), var(--accent-dark));
-    --accent-soft: light-dark(var(--accent-soft-light), var(--accent-soft-dark));
-    --selection-bg: light-dark(var(--selection-bg-light), var(--selection-bg-dark));
-
-    --tok-keyword: light-dark(var(--tok-keyword-light), var(--tok-keyword-dark));
-    --tok-string: light-dark(var(--tok-string-light), var(--tok-string-dark));
-    --tok-comment: light-dark(var(--tok-comment-light), var(--tok-comment-dark));
-    --tok-number: light-dark(var(--tok-number-light), var(--tok-number-dark));
-    --tok-type: light-dark(var(--tok-type-light), var(--tok-type-dark));
-    --tok-function: light-dark(var(--tok-function-light), var(--tok-function-dark));
-    --tok-operator: light-dark(var(--tok-operator-light), var(--tok-operator-dark));
-    --tok-property: light-dark(var(--tok-property-light), var(--tok-property-dark));
-    --tok-punctuation: light-dark(var(--tok-punctuation-light), var(--tok-punctuation-dark));
-
-    --scrollbar-thumb: light-dark(var(--scrollbar-thumb-light), var(--scrollbar-thumb-dark));
-    --scrollbar-track: light-dark(var(--scrollbar-track-light), var(--scrollbar-track-dark));
-  }
-
-  accent-color: var(--accent);
 }
 
-/* 推荐主题色卡预设（自动适配深浅模式对比度与选区色） */
+/* 手动锁定深色主题 */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface-0: var(--surface-0-dark);
+  --surface-1: var(--surface-1-dark);
+  --surface-2: var(--surface-2-dark);
+  --surface-hover: var(--surface-hover-dark);
+  --surface-active-line: var(--surface-active-line-dark);
+  --border-subtle: var(--border-subtle-dark);
+
+  --text-primary: var(--text-primary-dark);
+  --text-secondary: var(--text-secondary-dark);
+  --text-muted: var(--text-muted-dark);
+
+  --accent: var(--accent-dark);
+  --accent-soft: var(--accent-soft-dark);
+  --selection-bg: var(--selection-bg-dark);
+
+  --tok-keyword: var(--tok-keyword-dark);
+  --tok-string: var(--tok-string-dark);
+  --tok-comment: var(--tok-comment-dark);
+  --tok-number: var(--tok-number-dark);
+  --tok-type: var(--tok-type-dark);
+  --tok-function: var(--tok-function-dark);
+  --tok-operator: var(--tok-operator-dark);
+  --tok-property: var(--tok-property-dark);
+  --tok-punctuation: var(--tok-punctuation-dark);
+
+  --scrollbar-thumb: var(--scrollbar-thumb-dark);
+  --scrollbar-track: var(--scrollbar-track-dark);
+}
+
+/* 手动锁定浅色主题 */
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* 推荐主题色卡预设（默认科技蓝，全平台 WebKit/Chromium 一致渲染） */
 :root[data-accent="blue"] {
-  --accent-dark: oklch(67% 0.19 256);
-  --accent-soft-dark: oklch(67% 0.19 256 / 0.18);
-  --selection-bg-dark: oklch(58% 0.18 256 / 0.30);
-  --accent-light: oklch(53% 0.21 258);
-  --accent-soft-light: oklch(53% 0.21 258 / 0.12);
-  --selection-bg-light: oklch(60% 0.19 258 / 0.22);
+  --accent-dark: #4f8cff;
+  --accent-soft-dark: rgba(79, 140, 255, 0.18);
+  --selection-bg-dark: rgba(59, 130, 246, 0.30);
+  --accent-light: #2563eb;
+  --accent-soft-light: rgba(37, 99, 235, 0.12);
+  --selection-bg-light: rgba(37, 99, 235, 0.20);
 }
 
 :root[data-accent="indigo"] {
-  --accent-dark: oklch(72% 0.155 268);
-  --accent-soft-dark: oklch(72% 0.155 268 / 0.18);
-  --selection-bg-dark: oklch(60% 0.15 268 / 0.30);
-  --accent-light: oklch(52% 0.18 268);
-  --accent-soft-light: oklch(52% 0.18 268 / 0.12);
-  --selection-bg-light: oklch(62% 0.16 268 / 0.22);
+  --accent-dark: #818cf8;
+  --accent-soft-dark: rgba(129, 140, 248, 0.18);
+  --selection-bg-dark: rgba(99, 102, 241, 0.30);
+  --accent-light: #4f46e5;
+  --accent-soft-light: rgba(79, 70, 229, 0.12);
+  --selection-bg-light: rgba(79, 70, 229, 0.20);
 }
 
 :root[data-accent="violet"] {
-  --accent-dark: oklch(74% 0.165 300);
-  --accent-soft-dark: oklch(74% 0.165 300 / 0.18);
-  --selection-bg-dark: oklch(62% 0.15 300 / 0.30);
-  --accent-light: oklch(53% 0.19 300);
-  --accent-soft-light: oklch(53% 0.19 300 / 0.12);
-  --selection-bg-light: oklch(64% 0.16 300 / 0.22);
+  --accent-dark: #c084fc;
+  --accent-soft-dark: rgba(192, 132, 252, 0.18);
+  --selection-bg-dark: rgba(168, 85, 247, 0.30);
+  --accent-light: #7c3aed;
+  --accent-soft-light: rgba(124, 58, 237, 0.12);
+  --selection-bg-light: rgba(124, 58, 237, 0.20);
 }
 
 :root[data-accent="emerald"] {
-  --accent-dark: oklch(75% 0.145 158);
-  --accent-soft-dark: oklch(75% 0.145 158 / 0.16);
-  --selection-bg-dark: oklch(62% 0.13 158 / 0.28);
-  --accent-light: oklch(50% 0.15 158);
-  --accent-soft-light: oklch(50% 0.15 158 / 0.12);
-  --selection-bg-light: oklch(64% 0.13 158 / 0.22);
+  --accent-dark: #34d399;
+  --accent-soft-dark: rgba(52, 211, 153, 0.16);
+  --selection-bg-dark: rgba(16, 185, 129, 0.28);
+  --accent-light: #059669;
+  --accent-soft-light: rgba(5, 150, 105, 0.12);
+  --selection-bg-light: rgba(5, 150, 105, 0.20);
 }
 
 :root[data-accent="amber"] {
-  --accent-dark: oklch(78% 0.15 76);
-  --accent-soft-dark: oklch(78% 0.15 76 / 0.16);
-  --selection-bg-dark: oklch(68% 0.14 76 / 0.28);
-  --accent-light: oklch(58% 0.16 68);
-  --accent-soft-light: oklch(58% 0.16 68 / 0.14);
-  --selection-bg-light: oklch(72% 0.15 76 / 0.24);
+  --accent-dark: #fbbf24;
+  --accent-soft-dark: rgba(251, 191, 36, 0.16);
+  --selection-bg-dark: rgba(245, 158, 11, 0.28);
+  --accent-light: #d97706;
+  --accent-soft-light: rgba(217, 119, 6, 0.14);
+  --selection-bg-light: rgba(217, 119, 6, 0.22);
 }
 
 :root[data-accent="rose"] {
-  --accent-dark: oklch(72% 0.17 14);
-  --accent-soft-dark: oklch(72% 0.17 14 / 0.18);
-  --selection-bg-dark: oklch(62% 0.16 14 / 0.28);
-  --accent-light: oklch(55% 0.19 14);
-  --accent-soft-light: oklch(55% 0.19 14 / 0.12);
-  --selection-bg-light: oklch(65% 0.16 14 / 0.22);
+  --accent-dark: #fb7185;
+  --accent-soft-dark: rgba(251, 113, 133, 0.18);
+  --selection-bg-dark: rgba(244, 63, 94, 0.28);
+  --accent-light: #e11d48;
+  --accent-soft-light: rgba(225, 29, 72, 0.12);
+  --selection-bg-light: rgba(225, 29, 72, 0.20);
 }
 
 :root[data-accent="slate"] {
-  --accent-dark: oklch(76% 0.015 255);
-  --accent-soft-dark: oklch(76% 0.015 255 / 0.16);
-  --selection-bg-dark: oklch(62% 0.015 255 / 0.28);
-  --accent-light: oklch(44% 0.02 255);
-  --accent-soft-light: oklch(44% 0.02 255 / 0.12);
-  --selection-bg-light: oklch(56% 0.02 255 / 0.20);
+  --accent-dark: #cbd5e1;
+  --accent-soft-dark: rgba(203, 213, 225, 0.16);
+  --selection-bg-dark: rgba(148, 163, 184, 0.28);
+  --accent-light: #475569;
+  --accent-soft-light: rgba(71, 85, 105, 0.12);
+  --selection-bg-light: rgba(71, 85, 105, 0.20);
 }

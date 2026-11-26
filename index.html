@@ -9,6 +9,7 @@
         var saved = localStorage.getItem("reoo-color-scheme");
         if (saved === "light" || saved === "dark") {
           document.querySelector('meta[name="color-scheme"]').content = saved;
+          document.documentElement.setAttribute("data-theme", saved);
         }
       } catch (e) {}
     </script>

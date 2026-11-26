@@ -8,9 +8,11 @@ export interface ColorDecoration {
 /** 颜色预览小方块固定占位像素宽度（10px 方块 + 5px 间距），用于精确对齐光标与选区 */
 export const SWATCH_SLOT_WIDTH = 15;
 
-// 匹配 #RGB / #RGBA / #RRGGBB / #RRGGBBAA 以及 rgb/rgba/hsl/hsla/oklch(...)
+// 零 Lookbehind 兼容写法（兼容所有 macOS WKWebView / Linux WebKitGTK 版本）
 const COLOR_PATTERN =
-  /(?<![0-9a-zA-Z_-])#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])|\b(?:rgba?|hsla?|oklch)\(\s*[^()\n]{3,64}\)/g;
+  /#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])|\b(?:rgba?|hsla?|oklch)\(\s*[^()\n]{3,64}\)/g;
+
+const PREV_IDENT_CHAR = /[0-9a-zA-Z_-]/;
 
 function isValidCssColor(raw: string): boolean {
   if (raw.startsWith("#")) return true;
@@ -20,7 +22,7 @@ function isValidCssColor(raw: string): boolean {
   return true;
 }
 
-/** 将任意合法 CSS 颜色（含 #RGB / rgb / hsl / oklch）转为 #rrggbb 供原生取色器使用 */
+/** 将任意合法 CSS 颜色转为 #rrggbb 供原生取色器使用 */
 export function cssColorToHex(cssColor: string): string {
   const trimmed = cssColor.trim();
   if (/^#[0-9a-fA-F]{6}$/.test(trimmed)) {
@@ -35,14 +37,14 @@ export function cssColorToHex(cssColor: string): string {
     canvas.width = 1;
     canvas.height = 1;
     const ctx = canvas.getContext("2d");
-    if (!ctx) return "#38bdf8";
+    if (!ctx) return "#2563eb";
     ctx.fillStyle = trimmed;
     ctx.fillRect(0, 0, 1, 1);
     const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
     const hex = (n: number) => n.toString(16).padStart(2, "0");
     return `#${hex(r)}${hex(g)}${hex(b)}`;
   } catch {
-    return "#38bdf8";
+    return "#2563eb";
   }
 }
 
@@ -73,6 +75,14 @@ export function findColorDecorations(lineText: string): ColorDecoration[] {
 
   while ((match = COLOR_PATTERN.exec(lineText)) !== null) {
     const raw = match[0];
+    // 替代 (?<![0-9a-zA-Z_-])，避免旧版 WebKit 正则解析崩溃
+    if (
+      raw.startsWith("#") &&
+      match.index > 0 &&
+      PREV_IDENT_CHAR.test(lineText[match.index - 1])
+    ) {
+      continue;
+    }
     if (!isValidCssColor(raw)) continue;
     const startCol = utf16ToCharIdx[match.index];
     const endCol = utf16ToCharIdx[match.index + raw.length];
