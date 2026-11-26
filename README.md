@@ -1,8 +1,8 @@
 <div align="center">
   <img src="src/assets/reoo-icon.png" alt="Reoo Logo" width="96" height="96" />
   <h1>Reoo</h1>
-  <p><strong>新一代极简、轻量化、原生速度的现代代码与文本编辑器</strong></p>
-  <p>继承 Sublime Text 的极速响应、大文件秒开与 Hot Exit 灵魂，融合超越 Zed 的纯粹现代美学。</p>
+  <p><strong>仅2MB，新一代极简、轻量化、原生速度的现代代码与文本编辑器</strong></p>
+  <p>极速响应、大文件秒开、融合纯粹现代美学。</p>
 
   <p>
     <img src="https://img.shields.io/badge/Rust-2024_Edition-orange?style=flat-square&logo=rust" alt="Rust" />
@@ -16,7 +16,7 @@
 
 ## 核心特性
 
-- **极致轻量与瞬时启动**：基于 Rust + Tauri v2 + SolidJS，前端产物仅 **~30 KB gzip**，安装包不足 **10 MB**；首帧预热显示机制彻底消除黑屏闪烁，磁盘遍历与搜索全异步下沉后台线程。
+- **极致轻量与瞬时启动**：基于 Rust + Tauri v2 + SolidJS，前端产物仅 **~30 KB gzip**，安装包不足 **5 MB**；首帧预热显示机制彻底消除黑屏闪烁，磁盘遍历与搜索全异步下沉后台线程。
 - **Rope + Mmap 大文件引擎**：底层采用 B-Tree Rope（`ropey`）与零拷贝内存映射（`memmap2`），编辑与行寻址复杂度均为 $O(\log N)$；前端仅按视口渲染可见 50~80 行，轻松应对大文件流畅滚动。
 - **完整多光标编辑体验**：原生支持 `Ctrl+D` 增量选词、`Alt+点击` 任意加光标、左键无缝跨行拖拽选择、双/三击选词选行，以及原子级多光标撤销与重做。
 - **Ripgrep 同源极速搜索**：内置 `ignore` + `grep-searcher` 工作区并行搜索，同时提供当前文件高亮查找（`Ctrl+F`）与逐个/批量替换（`Ctrl+H`）。
