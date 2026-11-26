@@ -35,7 +35,7 @@ interface SettingsDialogProps {
 
 export function SettingsDialog(props: SettingsDialogProps) {
   let dialogRef: HTMLDialogElement | undefined;
-  const [appVersion, setAppVersion] = createSignal("0.1.2");
+  const [appVersion, setAppVersion] = createSignal("0.1.3");
   const [shellMenuEnabled, setShellMenuEnabled] = createSignal(false);
   const [shellBusy, setShellBusy] = createSignal(false);
 
